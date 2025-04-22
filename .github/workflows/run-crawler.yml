@@ -19,7 +19,13 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'  # 設定 Python 版本
-
+          
+      - name: Restore sent_links.json cache
+        uses: actions/cache@v3
+        with:
+          path: sent_links.json
+          key: sent-links-cache
+          
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -30,3 +36,10 @@ jobs:
 
       - name: Push result to Discord
         run: echo "已執行爬蟲並通知 Discord"
+
+      - name: Save updated sent_links.json to cache
+        if: always()
+        uses: actions/cache/save@v3
+        with:
+          path: sent_links.json
+          key: sent-links-cache   
