@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup as bs
 from dotenv import load_dotenv
 
 load_dotenv()
-WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK")
+WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK")
 cid = '7650'
 pages = "1"
 sent_log_file = 'sent_links.json'
