@@ -1,8 +1,10 @@
 name: Run Crawler Every 15 Minutes
-
+env:
+  DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+  
 on:
   schedule:
-    - cron: "*/15 * * * *"  # 每 15 分鐘執行一次
+    - cron: "*/5 * * * *"  # 每 15 分鐘執行一次
   workflow_dispatch:  # 手動觸發
 
 jobs:
