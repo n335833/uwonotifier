@@ -3,6 +3,8 @@ import json
 import time
 import datetime
 import os
+import re
+
 from urllib.parse import unquote
 from bs4 import BeautifulSoup as bs
 from dotenv import load_dotenv
@@ -24,15 +26,35 @@ def save_sent_links(links):
     with open(sent_log_file, 'w', encoding='utf-8') as f:
         json.dump(links, f, ensure_ascii=False, indent=2)
 
+
 def send_to_discord(title, link, content):
-    message = f"📢 **{title}**\n🔗 {link}\n```{content[:500]}...```"
-    data = {"content": message}
+    max_length = 1900
+
+    # ✅ 壓縮連續空行
+    content = re.sub(r'\n{2,}', '\n', content)
+
+    # ✅ 超過長度就截斷
+    if len(content) > max_length:
+        content = content[:max_length] + "\n...（內文過長已截斷）"
+
+    # ✅ 發送 Embed 訊息
+    embed = {
+        "title": f"📢 {title}",
+        "description": content,
+        "url": link,
+        "color": 0x00b0f4
+    }
+
+    data = {
+        "embeds": [embed]
+    }
+
     response = requests.post(WEBHOOK_URL, json=data)
     if response.status_code != 204:
         print("❌ 發送失敗：", response.status_code, response.text)
     else:
-        print("✅ 已發送：", title)
-
+        print("✅ 已發送嵌入：", title)
+        
 def request_get(uri):
     header = {'User-Agent': 'Mozilla/5.0'}
     res = rs.get(uri, headers=header)
