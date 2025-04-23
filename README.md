@@ -1,6 +1,6 @@
 # Wasabii Discord Notifier
 
-這是一個爬蟲程式，用來抓取 Wasabii 公告並推送至 Discord 頻道。
+這是一個爬蟲程式，用來抓取 UWO 公告並推送至 Discord 頻道。
 
 ## 安裝方式
 
