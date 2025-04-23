@@ -47,12 +47,22 @@ def parse_notice(uri, sent_links):
         for li in ul.findAll('li'):
             a_tag = li.find('a')
             time_tag = li.find('span', class_='news--time')
+            
             if not a_tag or not time_tag:
                 continue
+
             title = a_tag.getText().strip()
+
+            # 🚫 排除包含「客服」的公告
+            if "客服" in title:
+                print(f"🚫 略過含客服公告：{title}")
+                continue
+
             link = "https://gvl.wasabii.com.tw/notice/" + a_tag.get('href')
+
             if link in sent_links:
                 continue
+
             detail_html = request_get(link)
             soup2 = bs(detail_html, 'html.parser')
             content_div = soup2.find("div", class_="news-detail__content")
